@@ -1,14 +1,15 @@
 % Converts C to edge list and length
 function E = c2edgelist(C, X, Y)
-  [crows, ccols] = size(C);
-  E = zeros(ccols, 3);
-  for col = 1:ccols
+
+[crows, ccols] = size(C);
+E = zeros(ccols, 3);
+for col = 1:ccols
     % Get the locations of the two joints
     joints = [];
     for row = 1:crows
-      if C(row, col) ~= 0
-        joints = [joints, row];
-      end
+        if C(row, col) ~= 0
+            joints = [joints, row];
+        end
     end
     % Write joints to edgelist
     j1 = joints(1, 1);
@@ -20,6 +21,7 @@ function E = c2edgelist(C, X, Y)
     dy = (Y(1, j2) - Y(1, j1));
     distance = sqrt(dx * dx + dy * dy);
     E(col, 3) = distance;
-  end
 end
-    
+
+end
+

@@ -4,7 +4,8 @@
 % cost of building the truss
 
 filename=input('Enter the filename: ', 's'); %user needs to specify input name because there are several potential designs
-load (filename) % loads connection, support, x,y location and load vectors for the truss
+load(filename);% loads connection, support, x,y location and load vectors for the truss
+
 
 %set up the matrices we need for calculations
 E=c2edgelist(C,X,Y); %creates edgelist with columns listing first and second joint, length of member, number of rows is num members
