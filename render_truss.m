@@ -19,10 +19,7 @@ for i=1:length(E)
         % Tension
         color = [0 0 1];
     end
-    p = plot([X(1, E(i, 1)), X(1, E(i, 2))],
-        [Y(1, E(i, 1)), Y(1, E(i, 2))],
-        'LineWidth', 3,
-        'Color', color);
+    p = plot([X(1, E(i, 1)), X(1, E(i, 2))], [Y(1, E(i, 1)), Y(1, E(i, 2))], 'LineWidth', 3, 'Color', color);
 
 end
 

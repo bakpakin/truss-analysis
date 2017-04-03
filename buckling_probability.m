@@ -9,7 +9,7 @@ function g = sigmoid(x, a, c)
     if isscalar(c)
         c = repmat(c, size(x));
     end
-    g = 1 ./ (1 .+ e .^ (a .* (x - c)));
+    g = 1 ./ (1 + exp(a .* (x - c)));
 end
 
 threshold = -465.326 * E(:,3) .^ -1.55;
