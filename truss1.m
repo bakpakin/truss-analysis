@@ -13,7 +13,7 @@ A=setupA(C,X,Y,Sx,Sy);
 
 %calculate T and compare to class fit to see if anything will buckle
 T=inv(A)*L;%T is a column vector number of rows is number of members+support forces
-willbuckle=buckling_probability(T,E); %returns 1 or 0
+[perMember, total]=buckling_probability(T,E); %returns 1 or 0
 %need something to calculate uncertainty about buckling and specify which
 %member buckles
 

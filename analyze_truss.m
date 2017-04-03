@@ -14,13 +14,15 @@ E = c2edgelist(C,X,Y);
 A = setupA(C,X,Y,Sx,Sy);
 % Calculate matrix inverse only once
 Ainv = inv(A);
+T = [];
+memberProbs = [];
 
 % Binary search for load
 while abs(maxFactor - minFactor) > precision
     loadFactor = (maxFactor + minFactor) / 2;
     Ltest = L * loadFactor;
     T = Ainv * Ltest;
-    failProb = buckling_probability(T, E);
+    [memberProbs, failProb] = buckling_probability(T, E);
     if failProb > threshold
         % Decrease load
         maxFactor = loadFactor;
@@ -38,5 +40,8 @@ end
 % Caclulate cost and cost to load ratio
 cost=calc_cost(C, E);
 costRatio=calc_cr(cost, L);
+
+% Render truss
+render_truss(C, X, Y, T, memberProbs);
 
 end
