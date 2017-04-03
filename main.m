@@ -6,6 +6,6 @@ load(filename);
 [loadFactor, cost, costRatio] = analyze_truss(C, X, Y, Sx, Sy, L, 0.0001, 0.9999);
 
 % Print results
-fprintf('Maximum Load: %.2f N\n', 33);
+fprintf('Maximum Load: %.2f N\n', sum(L) * loadFactor);
 fprintf('Cost: $%.2f \n', cost);
 fprintf('Theoretical max load/cost ratio in N/$: %.4f \n', costRatio);

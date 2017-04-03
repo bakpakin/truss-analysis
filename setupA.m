@@ -1,8 +1,11 @@
 % Creates the A matrix from the five given inputs.
 function A = setupA(C, X, Y, Sx, Sy)
 
+% Make distances
+E = c2edgelist(C, X, Y);
+
 % Creates a quandrant of A
-function Q = makeQuadrant(W, E)
+function Q = makeQuadrant(W)
 [crows, ccols] = size(C);
 [rows, cols] = size(E);
 Q = zeros(crows, ccols);
@@ -17,11 +20,10 @@ for n = 1:rows
 end
 end
 
-% Make distances
-E = c2edgelist(C, X, Y);
 % Get the quadrants
-q1 = makeQuadrant(X, E);
-q2 = makeQuadrant(Y, E);
+q1 = makeQuadrant(X);
+q2 = makeQuadrant(Y);
+
 % Make A
 A = [q1, Sx; q2, Sy];
 

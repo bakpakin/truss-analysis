@@ -24,12 +24,14 @@ while abs(maxFactor - minFactor) > precision
     if failProb > threshold
         % Decrease load
         maxFactor = loadFactor;
+        maxFactorSet = 1;
     else
         % Increase load
         if maxFactorSet
             minFactor = loadFactor;
         else
             maxFactor = maxFactor * 2;
+        end
     end
 end
 
