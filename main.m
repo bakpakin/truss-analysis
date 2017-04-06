@@ -1,45 +1,28 @@
 % Analyze truss
 precision = 0.00001;
-threshold = 0.5;
 filename=input('Enter the filename: ', 's');
 load(filename);
 
-% Set things up for binary search
-minFactor = 0;
-maxFactor = 2;
-maxLoad = 1;
-maxFactorSet = 0;
+% Set things up
 E = c2edgelist(C,X,Y);
 A = setupA(C,X,Y,Sx,Sy);
-% Calculate matrix inverse only once
-Ainv = inv(A);
-T = [];
-memberProbs = [];
-L = L / sum(L);
+T = inv(A) * (L / sum(L));
+T_ = T(1:length(T) - 3,:);
 
-% Binary search for load
-while abs(maxFactor - minFactor) > precision
-    maxLoad = (maxFactor + minFactor) / 2;
-    Ltest = L * maxLoad;
-    T = Ainv * Ltest;
-    [memberProbs, failProb] = buckling_probability(T, E);
-    if failProb > threshold
-        % Decrease load
-        maxFactor = maxLoad;
-        maxFactorSet = 1;
-    else
-        % Increase load
-        if maxFactorSet
-            minFactor = maxLoad;
-        else
-            maxFactor = maxFactor * 2;
-        end
-    end
-end
+% Regressions from class data
+threshold = -465.326 * E(:,3) .^ -1.559;
+uncertainty = 302.4 ./ E(:,3) .^ 2.56;
+
+% Get maximum load
+bucklingPoints = threshold ./ T_;
+% Replace negatives with Infinity
+bucklingPoints(bucklingPoints<0) = 0/0;
+maxLoad = min(bucklingPoints);
+T = T * maxLoad;
 
 % Caclulate cost and cost to load ratio
 cost=calc_cost(C, E);
-costRatio=calc_cr(cost, L);
+costRatio=calc_cr(cost, maxLoad);
 
 % Padding
 fprintf('\n');
@@ -52,15 +35,12 @@ fprintf('Theoretical max load/cost ratio in N/$: %.4f \n', costRatio);
 % Padding
 fprintf('\n');
 
-% Get broken member
-breakcap=max(memberProbs);
-
 % Print out all member forces and if in tension or compression
 fprintf('Member forces in Newtons: \n');
 for i=1:(length(T)-3)
     didbreakstring = '';
-    if memberProbs(i, 1) == breakcap
-        didbreakstring = '(broken member)';
+    if bucklingPoints(i, 1) == maxLoad
+        didbreakstring = '(crticial member)';
     end
     if T(i,1)<0
         sense='C';
@@ -71,7 +51,7 @@ for i=1:(length(T)-3)
     if T(i,1)==0
         sense='N';
     end
-    fprintf('m%d:\t%3.3f\t(%s)\tlength: %2.3f\tbreakage prob.: %1.3f %s\n',i, abs(T(i,1)), sense, E(i, 3), memberProbs(i, 1), didbreakstring);
+    fprintf('m%d:\t%3.3f\t(%s)\tlength: %2.3f\tthreshold: %2.3f\tuncertainty: +-%2.3f %s\n',i, abs(T(i,1)), sense, E(i, 3), -threshold(i, 1), uncertainty(i, 1), didbreakstring);
 end
 
 % Padding
