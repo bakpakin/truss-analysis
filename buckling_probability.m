@@ -14,9 +14,9 @@ end
 
 threshold = -465.326 * E(:,3) .^ -1.55;
 % Drop the support forces
-memberTensions = T(1:length(T) - 3, 1);
+memberTensions = T(1:length(T) - 3, :);
 % Use the sigmoid function to calculate probability of buckling
-perMember = sigmoid(memberTensions, 20, threshold);
+perMember = sigmoid(memberTensions, 3, threshold);
 % The chance of the of the truss buckling is the inverse
 % of the probability that all members do not buckle.
 total = 1 - prod(1.-perMember);
