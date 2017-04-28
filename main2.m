@@ -8,9 +8,12 @@ A = setupA(C,X,Y,Sx,Sy);
 T = inv(A) * (L / sum(L));
 T_ = T(1:length(T) - 3,:);
 
+% Calculate straw lengths from joint to joint lengths
+newlengths = E(:,3) .- 0.5
+
 % Regressions from class data
-threshold = -465.326 * E(:,3) .^ -1.559;
-uncertainty = 302.4 ./ E(:,3) .^ 2.56;
+threshold = -465.326 * newlengths .^ -1.559;
+uncertainty = 302.4 ./ newlengths .^ 2.56;
 
 % Get maximum load
 bucklingPoints = threshold ./ T_;
