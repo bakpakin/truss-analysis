@@ -9,7 +9,7 @@ T = inv(A) * (L / sum(L));
 T_ = T(1:length(T) - 3,:);
 
 % Calculate straw lengths from joint to joint lengths
-newlengths = E(:,3) .- 0.5
+newlengths = E(:,3) - 0.5
 
 % Regressions from class data
 threshold = -465.326 * newlengths .^ -1.559;
@@ -23,7 +23,8 @@ maxLoad = min(bucklingPoints);
 T = T * maxLoad;
 
 % Caclulate cost and cost to load ratio
-cost=calc_cost(C, E);
+[j,m]=size(C);
+cost=10*j+sum(newlengths);
 costRatio=calc_cr(cost, maxLoad);
 
 % Padding
